@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">EasyNote</string>
-    <string name="title_notes">Notes</string>
-    <string name="title_todo_lists">Todo lists</string>
+    <string name="notes_fragment_label">Notes</string>
+    <string name="todo_lists_fragment_label">Todo lists</string>
+    <string name="fab_add_description">Add note or todo list action button</string>
+    <string name="add_note_activity_label">Add a note</string>
+    <string name="add_todo_list_activity_label">Add a todo list</string>
+
 </resources>

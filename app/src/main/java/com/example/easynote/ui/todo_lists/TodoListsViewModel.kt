@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.todo_lists
+package com.example.easynote.ui.todo_lists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
