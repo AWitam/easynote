@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">EasyNote</string>
+    <string name="title_notes">Notes</string>
+    <string name="title_todo_lists">Todo lists</string>
+</resources>
