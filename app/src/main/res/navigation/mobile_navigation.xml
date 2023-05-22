@@ -7,14 +7,14 @@
 
     <fragment
         android:id="@+id/navigation_notes"
-        android:name="com.example.myapplication.ui.notes.NotesFragment"
-        android:label="@string/title_notes"
+        android:name="com.example.easynote.ui.notes.NotesFragment"
+        android:label="@string/notes_fragment_label"
         tools:layout="@layout/fragment_notes" />
 
     <fragment
         android:id="@+id/navigation_todo_lists"
-        android:name="com.example.myapplication.ui.todo_lists.TodoListsFragment"
-        android:label="@string/title_todo_lists"
+        android:name="com.example.easynote.ui.todo_lists.TodoListsFragment"
+        android:label="@string/todo_lists_fragment_label"
         tools:layout="@layout/fragment_todo_lists" />
 
 </navigation>
