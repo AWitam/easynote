@@ -5,5 +5,8 @@
     <string name="fab_add_description">Add note or todo list action button</string>
     <string name="add_note_activity_label">Add a note</string>
     <string name="add_todo_list_activity_label">Add a todo list</string>
+    <string name="notes_title">Title</string>
+    <string name="notes_description">Enter your note</string>
+
 
 </resources>
