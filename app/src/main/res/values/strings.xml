@@ -7,6 +7,7 @@
     <string name="add_todo_list_activity_label">Add a todo list</string>
     <string name="notes_title">Title</string>
     <string name="notes_description">Enter your note</string>
+    <string name="no_notes">You don\'t have any notes yet. Create one now!</string>
 
 
 </resources>
