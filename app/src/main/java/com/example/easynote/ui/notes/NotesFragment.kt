@@ -1,14 +1,15 @@
 package com.example.easynote.ui.notes
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.easynote.NotesViewModel
 import com.example.easynote.R
 
 
@@ -18,46 +19,40 @@ class NotesFragment : Fragment() {
         fun newInstance() = NotesFragment()
     }
 
-    private val notesViewModel: NotesViewModel by viewModels { NotesViewModel.Factory }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: NotesListAdapter
+    private lateinit var emptyView: TextView
+
+    private val notesViewModel: NotesViewModel by activityViewModels { NotesViewModel.Factory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_notes, container, false);
-
+        emptyView = view.findViewById(R.id.empty_view)
+        recyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        adapter = NotesListAdapter()
+        recyclerView.adapter = adapter
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-        val emptyView = view.findViewById<View>(R.id.empty_view)
 
-        val data = notesViewModel.allNotes.value ?: emptyList()
-
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(activity)
-            if (data.isEmpty()) {
-                emptyView.visibility = View.VISIBLE
-                recyclerView.visibility = View.GONE
-            } else {
-                emptyView.visibility = View.GONE
+        notesViewModel.allNotes.observe(viewLifecycleOwner) { notes ->
+            if (notes.isNotEmpty()) {
                 recyclerView.visibility = View.VISIBLE
+                emptyView.visibility = View.GONE
+                adapter.submitList(notes)
+            } else {
+                recyclerView.visibility = View.GONE
+                emptyView.visibility = View.VISIBLE
             }
-            adapter = NotesAdapter(data)
         }
-
     }
 
-
-    /**
-     * This fragment lifecycle method is called when the view hierarchy associated with the fragment
-     * is being removed. As a result, clear out the binding object.
-     */
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 
 }

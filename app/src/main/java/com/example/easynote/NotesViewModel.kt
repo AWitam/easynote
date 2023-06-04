@@ -1,19 +1,36 @@
-package com.example.easynote.ui.notes
+package com.example.easynote
 
+import android.content.Intent
+import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.easynote.database.NotesRepository
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import com.example.easynote.EasyNoteApplication
+import androidx.lifecycle.viewModelScope
+import com.example.easynote.models.Note
+import com.example.easynote.ui.notes.AddNoteActivity
+import kotlinx.coroutines.launch
 
 
-class NotesViewModel(private val notesRepository: NotesRepository ) : ViewModel() {
+class NotesViewModel(private val notesRepository: NotesRepository) : ViewModel() {
     val allNotes = notesRepository.allNotes.asLiveData()
 
-    init {
-        println("BlankViewModel init")
+    fun insert(note: ActivityResult) = viewModelScope.launch {
+        val data: Intent? = note.data
+        val title = data?.getStringExtra(AddNoteActivity.TITLE_KEY)
+        val content = data?.getStringExtra(AddNoteActivity.DESCRIPTION_KEY)
+        val date = data?.getStringExtra(AddNoteActivity.DATE_KEY)
+
+        notesRepository.insert(
+            Note(
+                title = title,
+                note = content,
+                date = date,
+                id = null
+            )
+        )
     }
 
     companion object {

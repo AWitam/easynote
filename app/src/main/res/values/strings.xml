@@ -8,6 +8,8 @@
     <string name="notes_title">Title</string>
     <string name="notes_description">Enter your note</string>
     <string name="no_notes">You don\'t have any notes yet. Create one now!</string>
+    <string name="note_empty_not_saved">Please enter note title and content before saving.</string>
+
 
 
 </resources>
