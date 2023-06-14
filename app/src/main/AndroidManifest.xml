@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".EasyNoteApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,11 +15,13 @@
         <activity
             android:name=".ui.todo_lists.AddTodoList"
             android:exported="false"
-            android:label="@string/add_todo_list_activity_label"/>
+            android:label="@string/add_todo_list_activity_label"
+            android:parentActivityName=".MainActivity"/>
         <activity
-            android:name=".ui.notes.AddNote"
+            android:name=".ui.notes.AddNoteActivity"
             android:exported="false"
-            android:label="@string/add_note_activity_label" />
+            android:label="@string/add_note_activity_label"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
