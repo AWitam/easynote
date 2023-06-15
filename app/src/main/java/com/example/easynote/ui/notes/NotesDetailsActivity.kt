@@ -66,6 +66,17 @@ class NotesDetailsActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            deleteBtn.setOnClickListener{
+                val resultIntent = Intent(this, MainActivity::class.java)
+                resultIntent.putExtra(IS_DELETE, true)
+                resultIntent.putExtra(NOTE_ID, intent.getIntExtra(NOTE_ID, -1))
+                resultIntent.putExtra(TITLE_KEY, title.text.toString())
+                resultIntent.putExtra(DESCRIPTION_KEY, note_desc.text.toString())
+                startActivity(resultIntent)
+                finish()
+                return@setOnClickListener
+            }
+
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
             return@setOnClickListener
@@ -88,6 +99,8 @@ class NotesDetailsActivity : AppCompatActivity() {
         const val TITLE_KEY = "com.example.android.notes.new_note_title"
         const val DESCRIPTION_KEY = "com.example.android.notes.new_note_description"
         const val DATE_KEY = "com.example.android.notes.new_note_date"
+        const val IS_DELETE = "com.example.android.notes.is_delete"
+
     }
 
 }
