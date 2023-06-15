@@ -5,11 +5,11 @@ import android.content.Intent
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.easynote.database.NotesRepository
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewModelScope
 import com.example.easynote.models.Note
 import com.example.easynote.ui.notes.NotesDetailsActivity
 import kotlinx.coroutines.launch
@@ -60,6 +60,24 @@ class NotesViewModel(private val notesRepository: NotesRepository) : ViewModel()
         }
     }
 
+    fun deleteNote(intent: Intent) {
+        val title = intent.getStringExtra(NotesDetailsActivity.TITLE_KEY)
+        val content = intent.getStringExtra(NotesDetailsActivity.DESCRIPTION_KEY)
+        val date = intent.getStringExtra(NotesDetailsActivity.DATE_KEY)
+        val id = intent.getIntExtra(NotesDetailsActivity.NOTE_ID, -1)
+
+
+        viewModelScope.launch {
+            notesRepository.delete(
+                Note(
+                    title = title,
+                    note = content,
+                    date = date,
+                    id = id
+                )
+            )
+        }
+    }
 
 
     companion object {

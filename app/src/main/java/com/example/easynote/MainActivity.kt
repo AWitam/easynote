@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.easynote.databinding.ActivityMainBinding
 import com.example.easynote.ui.notes.NotesDetailsActivity
+import com.example.easynote.ui.notes.NotesDetailsActivity.Companion.IS_DELETE
 import com.example.easynote.ui.notes.NotesDetailsActivity.Companion.IS_UPDATE
 import com.example.easynote.ui.todo_lists.AddTodoList
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -58,6 +59,10 @@ class MainActivity : AppCompatActivity() {
         val intent = intent
         if (intent.hasExtra(IS_UPDATE)) {
             viewModel.updateNote(intent)
+        }
+
+        if(intent.hasExtra(IS_DELETE)) {
+            viewModel.deleteNote(intent)
         }
 
 
