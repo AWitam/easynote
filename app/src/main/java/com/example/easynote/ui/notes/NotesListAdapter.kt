@@ -1,5 +1,7 @@
 package com.example.easynote.ui.notes
 
+
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,45 +12,47 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.easynote.R
 import com.example.easynote.models.Note
 
+class NotesListAdapter : ListAdapter<Note, NotesListAdapter.ItemViewholder>(DiffCallback())  {
 
-class NotesListAdapter : ListAdapter<Note, NotesListAdapter.NoteViewHolder>(WordsComparator()) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        return NoteViewHolder.create(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewholder {
+        return ItemViewholder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.fragment_note_item, parent, false)
+        )
     }
 
-    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        val currentNote = getItem(position)
-        holder.bind(currentNote)
+    override fun onBindViewHolder(holder: NotesListAdapter.ItemViewholder, position: Int) {
+        holder.bind(getItem(position))
     }
 
-    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val title : TextView = itemView.findViewById(R.id.note_item_title)
-        private val content : TextView = itemView.findViewById(R.id.note_item_content)
-        private val date : TextView = itemView.findViewById(R.id.note_item_date)
+    class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: Note) = with(itemView) {
+            val title = findViewById<TextView>(R.id.note_item_title)
+            title.text = item.title
+            val description = findViewById<TextView>(R.id.note_item_content)
+            description.text = item.note
+            val date = findViewById<TextView>(R.id.note_item_date)
+            date.text = item.date
 
-        fun bind(currentNote: Note?) {
-            title.text = currentNote?.title
-            content.text = currentNote?.note
-            date.text = currentNote?.date
-        }
-
-        companion object {
-            fun create(parent: ViewGroup): NoteViewHolder {
-                val view: View = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.fragment_note_item, parent, false)
-                return NoteViewHolder(view)
+            setOnClickListener {
+                val intent = Intent(context, NotesDetailsActivity::class.java)
+                intent.putExtra(NotesDetailsActivity.NOTE_ID, item.id)
+                intent.putExtra(NotesDetailsActivity.TITLE_KEY, item.title)
+                intent.putExtra(NotesDetailsActivity.DESCRIPTION_KEY, item.note)
+                intent.putExtra(NotesDetailsActivity.DATE_KEY, item.date)
+                intent.putExtra(NotesDetailsActivity.IS_UPDATE, true)
+                context.startActivity(intent)
             }
         }
     }
+}
 
-    class WordsComparator : DiffUtil.ItemCallback<Note>() {
-        override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-            return oldItem === newItem
-        }
+class DiffCallback : DiffUtil.ItemCallback<Note>() {
+    override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
+        return oldItem.id == newItem.id
+    }
 
-        override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-            return oldItem.note == newItem.note
-        }
+    override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
+        return oldItem == newItem
     }
 }
