@@ -1,5 +1,6 @@
 package com.example.easynote
 
+
 import android.content.Intent
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
@@ -10,28 +11,56 @@ import com.example.easynote.database.NotesRepository
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import com.example.easynote.models.Note
-import com.example.easynote.ui.notes.AddNoteActivity
+import com.example.easynote.ui.notes.NotesDetailsActivity
 import kotlinx.coroutines.launch
 
 
 class NotesViewModel(private val notesRepository: NotesRepository) : ViewModel() {
     val allNotes = notesRepository.allNotes.asLiveData()
 
-    fun insert(note: ActivityResult) = viewModelScope.launch {
-        val data: Intent? = note.data
-        val title = data?.getStringExtra(AddNoteActivity.TITLE_KEY)
-        val content = data?.getStringExtra(AddNoteActivity.DESCRIPTION_KEY)
-        val date = data?.getStringExtra(AddNoteActivity.DATE_KEY)
 
-        notesRepository.insert(
-            Note(
-                title = title,
-                note = content,
-                date = date,
-                id = null
-            )
-        )
+    fun insertNote(activityResult: ActivityResult) {
+        val data = activityResult.data
+        val title = data?.getStringExtra(NotesDetailsActivity.TITLE_KEY)
+        val content = data?.getStringExtra(NotesDetailsActivity.DESCRIPTION_KEY)
+        val date = data?.getStringExtra(NotesDetailsActivity.DATE_KEY)
+
+        viewModelScope.launch {
+            viewModelScope.launch {
+                notesRepository.insert(
+                    Note(
+                        title = title,
+                        note = content,
+                        date = date,
+                        id = null
+                    )
+                )
+
+            }
+        }
     }
+
+
+    fun updateNote(intent: Intent) {
+        val title = intent.getStringExtra(NotesDetailsActivity.TITLE_KEY)
+        val content = intent.getStringExtra(NotesDetailsActivity.DESCRIPTION_KEY)
+        val date = intent.getStringExtra(NotesDetailsActivity.DATE_KEY)
+        val id = intent.getIntExtra(NotesDetailsActivity.NOTE_ID, -1)
+
+        viewModelScope.launch {
+            notesRepository.update(
+                Note(
+                    title = title,
+                    note = content,
+                    date = date,
+                    id = id
+                )
+            )
+
+        }
+    }
+
+
 
     companion object {
 
@@ -50,4 +79,3 @@ class NotesViewModel(private val notesRepository: NotesRepository) : ViewModel()
         }
     }
 }
-

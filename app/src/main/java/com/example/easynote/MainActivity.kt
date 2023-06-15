@@ -3,7 +3,7 @@ package com.example.easynote
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.result.ActivityResult
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +12,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.easynote.databinding.ActivityMainBinding
-import com.example.easynote.ui.notes.AddNoteActivity
+import com.example.easynote.ui.notes.NotesDetailsActivity
+import com.example.easynote.ui.notes.NotesDetailsActivity.Companion.IS_UPDATE
 import com.example.easynote.ui.todo_lists.AddTodoList
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private val addNoteLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                viewModel.insert(result)
+                viewModel.insertNote(result)
             }
         }
 
@@ -36,10 +37,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         val navView: BottomNavigationView = binding.navView
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+
 
         val navController = navHostFragment.navController
         // Passing each menu ID as a set of Ids because each
@@ -52,15 +55,19 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        val intent = intent
+        if (intent.hasExtra(IS_UPDATE)) {
+            viewModel.updateNote(intent)
+        }
+
 
         val fab: FloatingActionButton = findViewById(R.id.fab_add)
 
         fab.setOnClickListener {
-            val activity = when (navController.currentDestination?.id) {
+            when (navController.currentDestination?.id) {
                 R.id.navigation_notes -> {
-                    val intent = Intent(this, AddNoteActivity::class.java)
+                    val intent = Intent(this, NotesDetailsActivity::class.java)
                     addNoteLauncher.launch(intent)
-
                 }
 
                 R.id.navigation_todo_lists -> AddTodoList::class.java
@@ -70,5 +77,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d("MainActivity", "onNewIntent: $intent")
+    }
 
 }
