@@ -22,12 +22,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: NotesViewModel by viewModels { NotesViewModel.Factory }
+    private val notesViewModel: NotesViewModel by viewModels { NotesViewModel.Factory }
+    private val todoViewModel: TodoViewModel by viewModels { TodoViewModel.Factory }
+
 
     private val addNoteLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                viewModel.insertNote(result)
+                notesViewModel.insertNote(result)
             }
         }
 
@@ -58,11 +60,11 @@ class MainActivity : AppCompatActivity() {
 
         val intent = intent
         if (intent.hasExtra(IS_UPDATE)) {
-            viewModel.updateNote(intent)
+            notesViewModel.updateNote(intent)
         }
 
         if(intent.hasExtra(IS_DELETE)) {
-            viewModel.deleteNote(intent)
+            notesViewModel.deleteNote(intent)
         }
 
 
@@ -81,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
