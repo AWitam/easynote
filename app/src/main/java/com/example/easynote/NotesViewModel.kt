@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 class NotesViewModel(private val notesRepository: NotesRepository) : ViewModel() {
     val allNotes = notesRepository.allNotes.asLiveData()
 
-
     fun insertNote(activityResult: ActivityResult) {
         val data = activityResult.data
         val title = data?.getStringExtra(NotesDetailsActivity.TITLE_KEY)
