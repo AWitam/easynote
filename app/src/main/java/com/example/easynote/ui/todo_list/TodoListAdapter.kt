@@ -1,16 +1,24 @@
 package com.example.easynote.ui.todo_list
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
+import androidx.fragment.app.findFragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.easynote.MainActivity
 import com.example.easynote.R
 import com.example.easynote.models.Todo
+import com.example.easynote.ui.notes.NotesDetailsActivity
 
-class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.ItemViewHolder>(DiffCallback())  {
+class TodoListAdapter(private val checkboxListener: CheckboxListener) :
+    ListAdapter<Todo, TodoListAdapter.ItemViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -23,12 +31,39 @@ class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.ItemViewHolder>(DiffCa
         holder.bind(getItem(position))
     }
 
-    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Todo) = with(itemView) {
-            val title = findViewById<TextView>(R.id.todo_description)
+            val todoDescription = findViewById<TextView>(R.id.todo_item_description)
+            todoDescription.text = item.todo_description
+
+            val checkbox = findViewById<CheckBox>(R.id.checkbox)
+            checkbox.isChecked = item.completed
+
+            setOnClickListener {
+                val updateIntent = Intent(context, AddTodoListActivity::class.java)
+                setBaseExtras(updateIntent, item)
+                updateIntent.putExtra(AddTodoListActivity.TODO_COMPLETED_KEY, item.completed)
+                context.startActivity(updateIntent)
+            }
+
+            checkbox.setOnClickListener {
+                val toggleCompleteIntent = Intent(context, MainActivity::class.java)
+                setBaseExtras(toggleCompleteIntent, item)
+                toggleCompleteIntent.putExtra(
+                    AddTodoListActivity.TODO_COMPLETED_KEY,
+                    checkbox.isChecked
+                )
+                checkboxListener.onCheckboxStateChanged(toggleCompleteIntent)
             }
         }
+    }
 
+}
+
+fun setBaseExtras(intent: Intent, item: Todo) {
+    intent.putExtra(AddTodoListActivity.IS_TODO_UPDATE, true)
+    intent.putExtra(AddTodoListActivity.TODO_ID, item.id)
+    intent.putExtra(AddTodoListActivity.TODO_DESCRIPTION_KEY, item.todo_description)
 }
 
 class DiffCallback : DiffUtil.ItemCallback<Todo>() {
@@ -40,3 +75,4 @@ class DiffCallback : DiffUtil.ItemCallback<Todo>() {
         return oldItem == newItem
     }
 }
+

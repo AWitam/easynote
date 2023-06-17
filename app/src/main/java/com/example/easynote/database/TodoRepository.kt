@@ -18,7 +18,7 @@ class TodoRepository(private val todoDao: TodoDao) : ViewModel() {
     }
 
     suspend fun update(todo: Todo) {
-        todoDao.update(id = todo.id, completed = todo.completed)
+        todoDao.update(todo)
     }
 
 }

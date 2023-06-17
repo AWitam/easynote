@@ -32,7 +32,7 @@ class NotesDetailsActivity : AppCompatActivity() {
         deleteBtn = findViewById(R.id.icon_delete)
 
         val intent = intent
-        val isUpdate = intent?.getBooleanExtra(IS_UPDATE, false)
+        val isUpdate = intent?.getBooleanExtra(IS_NOTE_UPDATE, false)
 
         if (isUpdate == true) {
             title.setText(intent.getStringExtra(TITLE_KEY))
@@ -59,7 +59,7 @@ class NotesDetailsActivity : AppCompatActivity() {
             resultIntent.putExtra(DATE_KEY, formater.format(System.currentTimeMillis()))
 
             if (isUpdate == true) {
-                resultIntent.putExtra(IS_UPDATE, true)
+                resultIntent.putExtra(IS_NOTE_UPDATE, true)
                 resultIntent.putExtra(NOTE_ID, intent.getIntExtra(NOTE_ID, -1))
                 startActivity(resultIntent)
                 finish()
@@ -68,7 +68,7 @@ class NotesDetailsActivity : AppCompatActivity() {
 
             deleteBtn.setOnClickListener{
                 val resultIntent = Intent(this, MainActivity::class.java)
-                resultIntent.putExtra(IS_DELETE, true)
+                resultIntent.putExtra(IS_NOTE_DELETE, true)
                 resultIntent.putExtra(NOTE_ID, intent.getIntExtra(NOTE_ID, -1))
                 resultIntent.putExtra(TITLE_KEY, title.text.toString())
                 resultIntent.putExtra(DESCRIPTION_KEY, note_desc.text.toString())
@@ -92,12 +92,12 @@ class NotesDetailsActivity : AppCompatActivity() {
 
 
     companion object {
-        const val IS_UPDATE = "com.example.android.notes.is_update"
+        const val IS_NOTE_UPDATE = "com.example.android.notes.is_update"
         const val NOTE_ID = "com.example.android.notes.note_id"
         const val TITLE_KEY = "com.example.android.notes.new_note_title"
         const val DESCRIPTION_KEY = "com.example.android.notes.new_note_description"
         const val DATE_KEY = "com.example.android.notes.new_note_date"
-        const val IS_DELETE = "com.example.android.notes.is_delete"
+        const val IS_NOTE_DELETE = "com.example.android.notes.is_delete"
 
     }
 

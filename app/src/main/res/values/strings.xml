@@ -11,4 +11,5 @@
     <string name="no_notes">You don\'t have any notes yet. Create one now!</string>
     <string name="no_todos">You don\'t have any todos yet. Create one now!</string>
     <string name="note_empty_not_saved">Please enter note title and content before saving.</string>
+    <string name="todo_empty_not_saved">Please enter todo description before saving.</string>
 </resources>

@@ -40,7 +40,7 @@ class NotesListAdapter : ListAdapter<Note, NotesListAdapter.ItemViewholder>(Diff
                 intent.putExtra(NotesDetailsActivity.TITLE_KEY, item.title)
                 intent.putExtra(NotesDetailsActivity.DESCRIPTION_KEY, item.note)
                 intent.putExtra(NotesDetailsActivity.DATE_KEY, item.date)
-                intent.putExtra(NotesDetailsActivity.IS_UPDATE, true)
+                intent.putExtra(NotesDetailsActivity.IS_NOTE_UPDATE, true)
                 context.startActivity(intent)
             }
         }

@@ -3,24 +3,21 @@ package com.example.easynote
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.window.OnBackInvokedDispatcher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.easynote.databinding.ActivityMainBinding
 import com.example.easynote.ui.notes.NotesDetailsActivity
-import com.example.easynote.ui.notes.NotesDetailsActivity.Companion.IS_DELETE
-import com.example.easynote.ui.notes.NotesDetailsActivity.Companion.IS_UPDATE
+import com.example.easynote.ui.notes.NotesDetailsActivity.Companion.IS_NOTE_DELETE
+import com.example.easynote.ui.notes.NotesDetailsActivity.Companion.IS_NOTE_UPDATE
 import com.example.easynote.ui.notes.NotesViewModel
 import com.example.easynote.ui.todo_list.AddTodoListActivity
-import com.example.easynote.ui.todo_list.TodoListFragment
+import com.example.easynote.ui.todo_list.AddTodoListActivity.Companion.IS_TODO_DELETE
+import com.example.easynote.ui.todo_list.AddTodoListActivity.Companion.IS_TODO_UPDATE
 import com.example.easynote.ui.todo_list.TodoViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val notesViewModel: NotesViewModel by viewModels { NotesViewModel.Factory }
     private val todoViewModel: TodoViewModel by viewModels { TodoViewModel.Factory }
+    private var currentDestinationId = 0
 
 
     private val addNoteLauncher =
@@ -43,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     private val addTodoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                /// handle this in viewmodel
+                todoViewModel.insertTodo(result)
             }
         }
 
@@ -56,14 +54,13 @@ class MainActivity : AppCompatActivity() {
 
 
         val navView: BottomNavigationView = binding.navView
-
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
 
 
         val navController = navHostFragment.navController
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+        currentDestinationId  = navController.currentDestination?.id ?: 0
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_notes, R.id.navigation_todo_lists
@@ -74,12 +71,20 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         val intent = intent
-        if (intent.hasExtra(IS_UPDATE)) {
+        if (intent.hasExtra(IS_NOTE_UPDATE)) {
             notesViewModel.updateNote(intent)
         }
 
-        if(intent.hasExtra(IS_DELETE)) {
+        if (intent.hasExtra(IS_NOTE_DELETE)) {
             notesViewModel.deleteNote(intent)
+        }
+
+        if (intent.hasExtra(IS_TODO_UPDATE)) {
+            todoViewModel.updateTodo(intent)
+        }
+
+        if( intent.hasExtra(IS_TODO_DELETE)){
+            todoViewModel.deleteTodo(intent)
         }
 
 
@@ -96,9 +101,13 @@ class MainActivity : AppCompatActivity() {
                     val addTodoIntent = Intent(this, AddTodoListActivity::class.java)
                     addTodoLauncher.launch(addTodoIntent)
                 }
+
                 else -> null
             }
         }
-
     }
+
+
 }
+
+
