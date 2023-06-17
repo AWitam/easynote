@@ -1,4 +1,4 @@
-package com.example.easynote
+package com.example.easynote.ui.todo_list
 
 import com.example.easynote.database.TodoRepository
 import androidx.lifecycle.ViewModel
@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.easynote.EasyNoteApplication
 
 
 class TodoViewModel(private val todoRepository: TodoRepository) : ViewModel() {

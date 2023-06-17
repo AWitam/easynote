@@ -91,8 +91,6 @@ class NotesDetailsActivity : AppCompatActivity() {
     }
 
 
-
-
     companion object {
         const val IS_UPDATE = "com.example.android.notes.is_update"
         const val NOTE_ID = "com.example.android.notes.note_id"

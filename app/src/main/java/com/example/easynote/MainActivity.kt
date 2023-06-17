@@ -4,24 +4,31 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.window.OnBackInvokedDispatcher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.easynote.databinding.ActivityMainBinding
 import com.example.easynote.ui.notes.NotesDetailsActivity
 import com.example.easynote.ui.notes.NotesDetailsActivity.Companion.IS_DELETE
 import com.example.easynote.ui.notes.NotesDetailsActivity.Companion.IS_UPDATE
-import com.example.easynote.ui.todo_lists.AddTodoList
+import com.example.easynote.ui.notes.NotesViewModel
+import com.example.easynote.ui.todo_list.AddTodoListActivity
+import com.example.easynote.ui.todo_list.TodoListFragment
+import com.example.easynote.ui.todo_list.TodoViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
     private val notesViewModel: NotesViewModel by viewModels { NotesViewModel.Factory }
     private val todoViewModel: TodoViewModel by viewModels { TodoViewModel.Factory }
 
@@ -30,6 +37,13 @@ class MainActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 notesViewModel.insertNote(result)
+            }
+        }
+
+    private val addTodoLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                /// handle this in viewmodel
             }
         }
 
@@ -50,11 +64,12 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
+        appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_notes, R.id.navigation_todo_lists
             )
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
@@ -73,20 +88,17 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             when (navController.currentDestination?.id) {
                 R.id.navigation_notes -> {
-                    val intent = Intent(this, NotesDetailsActivity::class.java)
-                    addNoteLauncher.launch(intent)
+                    val addNoteIntent = Intent(this, NotesDetailsActivity::class.java)
+                    addNoteLauncher.launch(addNoteIntent)
                 }
 
-                R.id.navigation_todo_lists -> AddTodoList::class.java
+                R.id.navigation_todo_lists -> {
+                    val addTodoIntent = Intent(this, AddTodoListActivity::class.java)
+                    addTodoLauncher.launch(addTodoIntent)
+                }
                 else -> null
             }
         }
 
     }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        Log.d("MainActivity", "onNewIntent: $intent")
-    }
-
 }
