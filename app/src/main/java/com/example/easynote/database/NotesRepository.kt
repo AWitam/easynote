@@ -1,6 +1,5 @@
 package com.example.easynote.database
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.easynote.models.Note
 import kotlinx.coroutines.flow.Flow

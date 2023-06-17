@@ -1,4 +1,4 @@
-package com.example.easynote
+package com.example.easynote.ui.notes
 
 
 import android.content.Intent
@@ -9,15 +9,14 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.easynote.EasyNoteApplication
 import com.example.easynote.database.NotesRepository
 import com.example.easynote.models.Note
-import com.example.easynote.ui.notes.NotesDetailsActivity
 import kotlinx.coroutines.launch
 
 
 class NotesViewModel(private val notesRepository: NotesRepository) : ViewModel() {
     val allNotes = notesRepository.allNotes.asLiveData()
-
 
     fun insertNote(activityResult: ActivityResult) {
         val data = activityResult.data

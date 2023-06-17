@@ -9,6 +9,6 @@
     <item
         android:id="@+id/navigation_todo_lists"
         android:icon="@drawable/baseline_todo_list_24"
-        android:title="@string/todo_lists_fragment_label" />
+        android:title="@string/todo_list_fragment_label" />
 
 </menu>

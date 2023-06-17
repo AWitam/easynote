@@ -1,15 +1,14 @@
 <resources>
     <string name="app_name">EasyNote</string>
     <string name="notes_fragment_label">Notes</string>
-    <string name="todo_lists_fragment_label">Todo lists</string>
+    <string name="todo_list_fragment_label">Todo list</string>
     <string name="fab_add_description">Add note or todo list action button</string>
+    <string name="add_todo_description">Todo description</string>
     <string name="add_note_activity_label">Add a note</string>
     <string name="add_todo_list_activity_label">Add a todo list</string>
     <string name="notes_title">Title</string>
     <string name="notes_description">Enter your note</string>
     <string name="no_notes">You don\'t have any notes yet. Create one now!</string>
+    <string name="no_todos">You don\'t have any todos yet. Create one now!</string>
     <string name="note_empty_not_saved">Please enter note title and content before saving.</string>
-
-
-
 </resources>
