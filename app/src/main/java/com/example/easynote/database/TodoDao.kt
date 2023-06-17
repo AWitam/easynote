@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.easynote.models.Todo
 import kotlinx.coroutines.flow.Flow
 
@@ -20,7 +21,7 @@ interface TodoDao {
     @Query("SELECT * FROM todo_table ORDER BY id ASC")
     fun getAllTodo(): Flow<List<Todo>>
 
-    @Query("UPDATE todo_table set  completed = :completed where id = :id")
-    suspend fun update(id: Int?, completed: Boolean)
+    @Update
+    suspend fun update(todo: Todo)
 
 }
