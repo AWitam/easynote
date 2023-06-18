@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -20,6 +21,8 @@ class AddTodoListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_todo)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         todoDescription = findViewById(R.id.todo_description)
         saveBtn = findViewById(R.id.icon_save)
@@ -72,8 +75,16 @@ class AddTodoListActivity : AppCompatActivity() {
 
     }
 
-    fun validateInput(todoDescription: EditText): Boolean {
+    private fun validateInput(todoDescription: EditText): Boolean {
         return TextUtils.isEmpty(todoDescription.text.toString())
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

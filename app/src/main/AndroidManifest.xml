@@ -16,13 +16,12 @@
             android:name=".ui.todo_list.AddTodoListActivity"
             android:exported="false"
             android:label="@string/add_todo_list_activity_label"
-            android:parentActivityName=".MainActivity"
-            />
+            android:theme="@style/Theme.MyApplication" />
         <activity
             android:name=".ui.notes.NotesDetailsActivity"
             android:exported="false"
             android:label="@string/add_note_activity_label"
-            android:parentActivityName=".MainActivity"/>
+            android:theme="@style/Theme.MyApplication" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -36,3 +35,4 @@
     </application>
 
 </manifest>
+
