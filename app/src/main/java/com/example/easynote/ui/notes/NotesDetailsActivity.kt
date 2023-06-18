@@ -6,6 +6,7 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -25,6 +26,8 @@ class NotesDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         title = findViewById(R.id.notes_title)
         note_desc = findViewById(R.id.notes_description)
@@ -66,7 +69,7 @@ class NotesDetailsActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            deleteBtn.setOnClickListener{
+            deleteBtn.setOnClickListener {
                 val resultIntent = Intent(this, MainActivity::class.java)
                 resultIntent.putExtra(IS_NOTE_DELETE, true)
                 resultIntent.putExtra(NOTE_ID, intent.getIntExtra(NOTE_ID, -1))
@@ -83,11 +86,18 @@ class NotesDetailsActivity : AppCompatActivity() {
         }
 
 
-
     }
 
     fun validateInput(title: EditText, description: EditText): Boolean {
         return TextUtils.isEmpty(title.text.toString()) or TextUtils.isEmpty(description.text.toString())
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
